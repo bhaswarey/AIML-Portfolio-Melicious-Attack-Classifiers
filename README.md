@@ -902,13 +902,13 @@ Following is a sample view of the normal data:
 
 ### 5.3.2   Multi-class Classification Model Comparison
 
-TDB - pending completion of program execution 
+TDB - pending completion of program execution - becasue of the size of the data, the program has been running for over a week now and is partially complete, i.e., binary classification is done but the multi-class classification part is still executing and that is why these sections are marked as TBD
 
 
 
 ### 5.3.3   Feature engineering and exploration 
 
-TDB - pending completion of program execution 
+TDB - pending completion of program execution - becasue of the size of the data, the program has been running for over a week now and is partially complete, i.e., binary classification is done but the multi-class classification part is still executing and that is why these sections are marked as TBD
 
 
 
@@ -916,7 +916,7 @@ TDB - pending completion of program execution
 
 ### 6.0   Deployment
 
-
+- becasue of the size of the data, the program has been running for over a week now and is partially complete, i.e., binary classification is done but the multi-class classification part is still executing and that is why these sections are marked as TBD
 
 ### 6.0.1   Summary
 
