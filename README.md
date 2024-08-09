@@ -1422,7 +1422,7 @@ Summarized per class:
 
  ![AIML-Portfolio-Melicious-Attack-Classifiers/images/proto_benign_malicious.png at main · bhaswarey/AIML-Portfolio-Melicious-Attack-Classifiers](https://github.com/bhaswarey/AIML-Portfolio-Melicious-Attack-Classifiers/blob/main/images/test_best_model_multi-class_one_vs_one_matrix.png) 
 
-**Figure 28 - Multi-class Classification - One-Vs-One Matrix **
+**Figure 28 - Multi - class Classification - One-Vs-One Matrix **
 
 
 
