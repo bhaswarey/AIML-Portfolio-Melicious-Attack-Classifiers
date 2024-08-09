@@ -1223,19 +1223,19 @@ Lets examine 'Offset', 'sTls', and 'sHops':
 
  ![AIML-Portfolio-Melicious-Attack-Classifiers/images/proto_benign_malicious.png at main · bhaswarey/AIML-Portfolio-Melicious-Attack-Classifiers](https://github.com/bhaswarey/AIML-Portfolio-Melicious-Attack-Classifiers/blob/main/images/mc_offset_density.png) 
 
-**Figure 25 - Benign & Malicious 'Offset' Density **
+**Figure 25 - Benign & Malicious 'Offset' Density**
 
 
 
  ![AIML-Portfolio-Melicious-Attack-Classifiers/images/proto_benign_malicious.png at main · bhaswarey/AIML-Portfolio-Melicious-Attack-Classifiers](https://github.com/bhaswarey/AIML-Portfolio-Melicious-Attack-Classifiers/blob/main/images/mc_sttl_density.png) 
 
-**Figure 26 - Benign & Malicious 'sTtl' Density **
+**Figure 26 - Benign & Malicious 'sTtl' Density**
 
 
 
  ![AIML-Portfolio-Melicious-Attack-Classifiers/images/proto_benign_malicious.png at main · bhaswarey/AIML-Portfolio-Melicious-Attack-Classifiers](https://github.com/bhaswarey/AIML-Portfolio-Melicious-Attack-Classifiers/blob/main/images/mc_shops_density.png) 
 
-**Figure 27 - Benign & Malicious 'sHops' Density **
+**Figure 27 - Benign & Malicious 'sHops' Density**
 
 
 
@@ -1422,7 +1422,7 @@ Summarized per class:
 
  ![AIML-Portfolio-Melicious-Attack-Classifiers/images/proto_benign_malicious.png at main · bhaswarey/AIML-Portfolio-Melicious-Attack-Classifiers](https://github.com/bhaswarey/AIML-Portfolio-Melicious-Attack-Classifiers/blob/main/images/test_best_model_multi-class_one_vs_one_matrix.png) 
 
-**Figure 28 - Multi - class Classification - One-Vs-One Matrix **
+**Figure 28 - Multi-class Classification - One-Vs-One Matrix**
 
 
 
