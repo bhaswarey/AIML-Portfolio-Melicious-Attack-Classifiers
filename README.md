@@ -1,5 +1,3 @@
-
-
 # Capstone Project : Cellular Device Originated Melicious Attack Classification
 
 [Link to notebook:]  AIML-Portfolio-Melicious-Attack-Classifiers/prompt_IV_part1.ipynb at main · bhaswarey/AIML-Portfolio-Melicious-Attack-Classifiers](https://github.com/bhaswarey/AIML-Portfolio-Melicious-Attack-Classifiers/blob/main/prompt_IV_part1.ipynb) 
@@ -47,7 +45,11 @@ This section provides information about the data, its description and is its exp
 
 ## 2.1 **Gathering and Describing Data**
 
-This data comes from [UCI Machine Learning repository Links to an external site.](https://archive.ics.uci.edu/ml/datasets/bank+marketing). Here is a sample of the data:
+This data comes from [UCI Machine Learning repository Links to an external site.](https://archive.ics.uci.edu/ml/datasets/bank+marketing). 
+
+
+
+Here is a sample of the data:
 
 
 
@@ -196,89 +198,172 @@ Target Labels:
 
 
 
-Categories per feature and their frequency:
+A sample set of size 100K was randomly selected to represent the 1.2M entries, because of the cost of processing 1.2M entries in terms of high CPU processing power and more importantly the time it takes (3+ weeks) to evaluate and select the suitable model.
+
+
+
+Upon closely examining the data, following features were removed since they were not relevent to 'Y' (i.e., they were intriduced by Argus tool as part of message flow generation) :
+
+- Unnamed, Seq, Cause, and Attack Tool.
+
+  Note: the index was reset.
+
+
+
+Here is want the samlple data of the randomly selected 100K entires post removal of features not related to 'Y':
 
 ```
-_________________________________________
-
-Feature: Proto
-    category  freq in %
-0        udp      74.28
-1        tcp      22.92
-2       icmp       2.44
-3       sctp       0.36
-4  ipv6-icmp       0.00
-_________________________________________
-
-Feature: sDSb
-   category  freq in %
-0       cs0      99.47
-1        ef       0.29
-2      af11       0.06
-3       cs6       0.05
-4       cs7       0.04
-5      af41       0.04
-6        52       0.01
-7      af12       0.01
-8       cs4       0.01
-9         4       0.01
-10       39       0.00
-11       54       0.00
-_________________________________________
-
-Feature: Cause
-   category  freq in %
-0    Status      59.92
-1     Start      40.02
-2  Shutdown       0.06
-_________________________________________
-
-Feature: State
-   category  freq in %
-0       REQ      48.46
-1       INT      27.04
-2       CON      10.87
-3       RST       6.22
-4       FIN       4.87
-5       ECO       2.37
-6       ACC       0.09
-7       URP       0.06
-8       RSP       0.01
-9       TST       0.00
-10      NRS       0.00
-_________________________________________
-
-Feature: Label
-    category  freq in %
-0  Malicious      60.72
-1     Benign      39.28
-_________________________________________
-
-Feature: Attack Type
-         category  freq in %
-0          Benign      39.28
-1        UDPFlood      37.62
-2       HTTPFlood      11.58
-3     SlowrateDoS       6.02
-4  TCPConnectScan       1.65
-5         SYNScan       1.65
-6         UDPScan       1.31
-7        SYNFlood       0.80
-8       ICMPFlood       0.10
-_________________________________________
-
-Feature: Attack Tool
-     category  freq in %
-0      Benign      39.28
-1      Hping3      38.51
-2   Goldeneye      11.58
-3  Torshammer       4.92
-4        Nmap       4.61
-5   Slowloris       1.09
-_________________________________________
+<class 'pandas.core.frame.DataFrame'>
+RangeIndex: 100000 entries, 0 to 99999
+Data columns (total 49 columns):
+ #   Column       Non-Null Count   Dtype  
+---  ------       --------------   -----  
+ 0   index        100000 non-null  int64  
+ 1   Dur          100000 non-null  float64
+ 2   RunTime      100000 non-null  float64
+ 3   Mean         100000 non-null  float64
+ 4   Sum          100000 non-null  float64
+ 5   Min          100000 non-null  float64
+ 6   Max          100000 non-null  float64
+ 7   Proto        100000 non-null  object 
+ 8   sTos         99976 non-null   float64
+ 9   dTos         22347 non-null   float64
+ 10  sDSb         99976 non-null   object 
+ 11  dDSb         22347 non-null   object 
+ 12  sTtl         99976 non-null   float64
+ 13  dTtl         22347 non-null   float64
+ 14  sHops        99976 non-null   float64
+ 15  dHops        22347 non-null   float64
+ 16  TotPkts      100000 non-null  int64  
+ 17  SrcPkts      100000 non-null  int64  
+ 18  DstPkts      100000 non-null  int64  
+ 19  TotBytes     100000 non-null  int64  
+ 20  SrcBytes     100000 non-null  int64  
+ 21  DstBytes     100000 non-null  int64  
+ 22  Offset       100000 non-null  int64  
+ 23  sMeanPktSz   100000 non-null  float64
+ 24  dMeanPktSz   100000 non-null  float64
+ 25  Load         100000 non-null  float64
+ 26  SrcLoad      100000 non-null  float64
+ 27  DstLoad      100000 non-null  float64
+ 28  Loss         100000 non-null  int64  
+ 29  SrcLoss      100000 non-null  int64  
+ 30  DstLoss      100000 non-null  int64  
+ 31  pLoss        100000 non-null  float64
+ 32  SrcGap       22824 non-null   float64
+ 33  DstGap       22824 non-null   float64
+ 34  Rate         100000 non-null  float64
+ 35  SrcRate      100000 non-null  float64
+ 36  DstRate      100000 non-null  float64
+ 37  State        100000 non-null  object 
+ 38  SrcWin       19818 non-null   float64
+ 39  DstWin       14418 non-null   float64
+ 40  sVid         9608 non-null    float64
+ 41  dVid         159 non-null     float64
+ 42  SrcTCPBase   22824 non-null   float64
+ 43  DstTCPBase   18837 non-null   float64
+ 44  TcpRtt       100000 non-null  float64
+ 45  SynAck       100000 non-null  float64
+ 46  AckDat       100000 non-null  float64
+ 47  Label        100000 non-null  object 
+ 48  Attack Type  100000 non-null  object 
+dtypes: float64(32), int64(11), object(6)
+memory usage: 37.4+ MB
 ```
 
-The above provides the categorical features and the category per feature with the frequency of occurrence. 
+```
+              index            Dur        RunTime           Mean  \
+count  1.000000e+05  100000.000000  100000.000000  100000.000000   
+mean   6.079342e+05       1.363501       1.363501       1.363501   
+std    3.519268e+05       1.688935       1.688935       1.688935   
+min    0.000000e+00       0.000000       0.000000       0.000000   
+25%    3.024070e+05       0.000000       0.000000       0.000000   
+50%    6.075380e+05       0.000000       0.000000       0.000000   
+75%    9.135062e+05       2.580313       2.580313       2.580313   
+max    1.215888e+06      19.630236      19.630236      19.630236   
+
+                 Sum            Min            Max          sTos  \
+count  100000.000000  100000.000000  100000.000000  99976.000000   
+mean        1.363501       1.363501       1.363501      0.827689   
+std         1.688935       1.688935       1.688935     12.211587   
+min         0.000000       0.000000       0.000000      0.000000   
+25%         0.000000       0.000000       0.000000      0.000000   
+50%         0.000000       0.000000       0.000000      0.000000   
+75%         2.580313       2.580313       2.580313      0.000000   
+max        19.630236      19.630236      19.630236    224.000000   
+
+               dTos          sTtl          dTtl         sHops         dHops  \
+count  22347.000000  99976.000000  22347.000000  99976.000000  22347.000000   
+mean       2.582539     81.802082     65.292209      2.275696      5.022732   
+std       20.859433     56.403271     27.892751      3.593459      2.281658   
+min        0.000000     36.000000     41.000000      0.000000      0.000000   
+25%        0.000000     63.000000     59.000000      1.000000      5.000000   
+50%        0.000000     63.000000     59.000000      1.000000      5.000000   
+75%        0.000000     63.000000     59.000000      1.000000      5.000000   
+max      186.000000    255.000000    255.000000     28.000000     45.000000   
+
+             TotPkts       SrcPkts       DstPkts      TotBytes       SrcBytes  \
+count  100000.000000  100000.00000  100000.00000  1.000000e+05  100000.000000   
+mean        5.106650       3.68305       1.42360  3.598969e+03    2506.141530   
+std        24.604368      18.29323      11.96787  2.971134e+04   24209.952112   
+min         1.000000       0.00000       0.00000  4.200000e+01       0.000000   
+25%         1.000000       1.00000       0.00000  4.200000e+01      42.000000   
+50%         2.000000       1.00000       0.00000  8.400000e+01      74.000000   
+75%         2.000000       2.00000       0.00000  8.400000e+01      84.000000   
+max      2732.000000     673.00000    2059.00000  3.028111e+06  683182.000000   
+
+           DstBytes        Offset     sMeanPktSz     dMeanPktSz          Load  \
+count  1.000000e+05  1.000000e+05  100000.000000  100000.000000  1.000000e+05   
+mean   1.092828e+03  1.236100e+07      73.873508      61.215904  7.362111e+06   
+std    1.629788e+04  1.068968e+07     145.323400     213.562290  7.250058e+08   
+min    0.000000e+00  1.280000e+02       0.000000       0.000000  0.000000e+00   
+25%    0.000000e+00  3.061331e+06      42.000000       0.000000  0.000000e+00   
+50%    0.000000e+00  9.860672e+06      42.000000       0.000000  0.000000e+00   
+75%    0.000000e+00  1.908555e+07      67.000000       0.000000  1.305194e+02   
+max    2.935754e+06  3.968801e+07    1392.000000    1465.833374  8.619200e+10   
+
+            SrcLoad       DstLoad           Loss        SrcLoss  \
+count  1.000000e+05  1.000000e+05  100000.000000  100000.000000   
+mean   1.804870e+05  7.181624e+06       0.022680       0.013500   
+std    1.397924e+07  7.120108e+08       0.229665       0.171925   
+min    0.000000e+00  0.000000e+00       0.000000       0.000000   
+25%    0.000000e+00  0.000000e+00       0.000000       0.000000   
+50%    0.000000e+00  0.000000e+00       0.000000       0.000000   
+75%    1.304916e+02  0.000000e+00       0.000000       0.000000   
+max    2.112000e+09  8.408000e+10      13.000000       6.000000   
+
+             DstLoss          pLoss        SrcGap        DstGap          Rate  \
+count  100000.000000  100000.000000  22824.000000  22824.000000  1.000000e+05   
+mean        0.009180       0.363532      0.142131      2.463722  1.332903e+03   
+std         0.149184       3.758572     20.298604    232.631385  1.052228e+05   
+min         0.000000       0.000000      0.000000      0.000000  0.000000e+00   
+25%         0.000000       0.000000      0.000000      0.000000  0.000000e+00   
+50%         0.000000       0.000000      0.000000      0.000000  0.000000e+00   
+75%         0.000000       0.000000      0.000000      0.000000  3.886160e-01   
+max         7.000000      60.000000   3064.000000  32976.000000  1.300000e+07   
+
+            SrcRate       DstRate        SrcWin        DstWin    sVid   dVid  \
+count  1.000000e+05  1.000000e+05  1.981800e+04  1.441800e+04  9608.0  159.0   
+mean   3.325112e+02  7.494301e+02  9.667513e+05  6.975303e+04   610.0  610.0   
+std    2.683709e+04  6.847293e+04  5.149044e+06  1.960537e+05     0.0    0.0   
+min    0.000000e+00  0.000000e+00  0.000000e+00  0.000000e+00   610.0  610.0   
+25%    0.000000e+00  0.000000e+00  5.657600e+04  6.476800e+04   610.0  610.0   
+50%    0.000000e+00  0.000000e+00  6.259200e+04  6.489600e+04   610.0  610.0   
+75%    3.883370e-01  0.000000e+00  6.425600e+04  6.502400e+04   610.0  610.0   
+max    4.000000e+06  8.000000e+06  3.355392e+07  8.340480e+06   610.0  610.0   
+
+         SrcTCPBase    DstTCPBase         TcpRtt         SynAck         AckDat  
+count  2.282400e+04  1.883700e+04  100000.000000  100000.000000  100000.000000  
+mean   2.042588e+09  2.137738e+09       0.004668       0.000555       0.004113  
+std    1.233011e+09  1.241607e+09       0.016869       0.012186       0.010753  
+min    1.509510e+05  2.599570e+05       0.000000       0.000000       0.000000  
+25%    9.776496e+08  1.054640e+09       0.000000       0.000000       0.000000  
+50%    1.994167e+09  2.158072e+09       0.000000       0.000000       0.000000  
+75%    3.079786e+09  3.207978e+09       0.000000       0.000000       0.000000  
+max    4.294967e+09  4.294824e+09       1.051156       1.024680       0.266729  
+```
+
+
 
 
 
@@ -322,11 +407,12 @@ The above provides the categorical features and the category per feature with th
 
 Next step is to check the quality of the data. For example, due to the presence of categorical features,  the summary of the data is checked for the types in each category. By doing this, the step needed for data cleaning or to be transformed is identified. For example, checking for missing/empty values.
 
+
+
 Following is the list of missing values in percentage:
 
 ```
-Unnamed: 0      0.00
-Seq             0.00
+index           0.00
 Dur             0.00
 RunTime         0.00
 Mean            0.00
@@ -335,14 +421,13 @@ Min             0.00
 Max             0.00
 Proto           0.00
 sTos            0.02
-dTos           77.56
+dTos           77.65
 sDSb            0.02
-dDSb           77.56
+dDSb           77.65
 sTtl            0.02
-dTtl           77.56
+dTtl           77.65
 sHops           0.02
-dHops          77.56
-Cause           0.00
+dHops          77.65
 TotPkts         0.00
 SrcPkts         0.00
 DstPkts         0.00
@@ -359,56 +444,119 @@ Loss            0.00
 SrcLoss         0.00
 DstLoss         0.00
 pLoss           0.00
-SrcGap         77.08
-DstGap         77.08
+SrcGap         77.18
+DstGap         77.18
 Rate            0.00
 SrcRate         0.00
 DstRate         0.00
 State           0.00
-SrcWin         80.06
-DstWin         85.44
-sVid           90.58
-dVid           99.83
-SrcTCPBase     77.08
-DstTCPBase     81.08
+SrcWin         80.18
+DstWin         85.58
+sVid           90.39
+dVid           99.84
+SrcTCPBase     77.18
+DstTCPBase     81.16
 TcpRtt          0.00
 SynAck          0.00
 AckDat          0.00
 Label           0.00
 Attack Type     0.00
-Attack Tool     0.00
 dtype: float64
 ```
 
 
 
+Categories per feature and their frequency:
+
+```
+_________________________________________
+
+Feature: Proto
+    category  freq in %
+0        udp      74.36
+1        tcp      22.83
+2       icmp       2.45
+3       sctp       0.36
+4  ipv6-icmp       0.00
+_________________________________________
+
+Feature: sDSb
+   category  freq in %
+0       cs0      99.49
+1        ef       0.29
+2      af11       0.06
+3       cs6       0.05
+4      af41       0.04
+5       cs7       0.03
+6      af12       0.01
+7        52       0.01
+8       cs4       0.01
+9         4       0.00
+10       39       0.00
+_________________________________________
+
+Feature: State
+   category  freq in %
+0       REQ      48.31
+1       INT      27.26
+2       CON      10.81
+3       RST       6.32
+4       FIN       4.75
+5       ECO       2.39
+6       ACC       0.09
+7       URP       0.06
+8       RSP       0.00
+9       TST       0.00
+10      NRS       0.00
+_________________________________________
+
+Feature: Label
+    category  freq in %
+0  Malicious      60.58
+1     Benign      39.42
+_________________________________________
+
+Feature: Attack Type
+         category  freq in %
+0          Benign      39.42
+1        UDPFlood      37.55
+2       HTTPFlood      11.61
+3     SlowrateDoS       5.96
+4         SYNScan       1.65
+5  TCPConnectScan       1.63
+6         UDPScan       1.32
+7        SYNFlood       0.76
+8       ICMPFlood       0.11
+_________________________________________
+```
 
 
-Figure 1 is the result of an attempt to preserve features that have over 80% of missing data by removing rows with null data. This approach resulted in the dataset to be be reduced from 1.2M to ~300K rows and caused the data to be imbalanced (for target column 'Label')   
+
+The above provides the categorical features and the category per feature with the frequency of occurrence. 
+
+ 
 
 ![AIML-Portfolio-Melicious-Attack-Classifiers/images/pie_benign_malicious_before_cleaning_data.png at main · bhaswarey/AIML-Portfolio-Melicious-Attack-Classifiers](https://github.com/bhaswarey/AIML-Portfolio-Melicious-Attack-Classifiers/blob/main/images/pie_benign_malicious_before_cleaning_data.png) 
 
 **Figure 1 - Benign vs Malicious Result - Before Dropping Features with >= 77% Missing Data**
 
-Given the result in Figure 1, the approach taken was to drop features with missing data above 77%., followed by removing duplicates. Figure 2 provides the 'Label' discribution after removing null and duplicate data.
+
+
+Figure 2 provides the 'Label' ('Y') distribution after removing features with missing values >= 77% followed by removing all entries containing null values and duplicate entries.
 
 ![AIML-Portfolio-Melicious-Attack-Classifiers/images/pie_benign_malicious_after_cleaning_data.png at main · bhaswarey/AIML-Portfolio-Melicious-Attack-Classifiers](https://github.com/bhaswarey/AIML-Portfolio-Melicious-Attack-Classifiers/blob/main/images/pie_benign_malicious_after_cleaning_data.png) 
 
-**Figure 2 - Benign vs Malicious Result - Post Dropping Features with >= 77% Missing Data**
+**Figure 2 - Benign vs Malicious Result - Post Dropping Features with >= 77% & Addressing Missing/Duplicate Entries**
 
 
 
 Shape pre & post treating duplicate data:
 
 ```
-(1215676, 39)
-Duplicates : 21
-Shape post treating duplicates: (1215655, 39)
+Pre data treatment shape - (99976, 37)
+Duplicates : 0
+Post data treatment shape - (99976, 37)
 ```
-
-
-
-
 
 
 
@@ -442,31 +590,27 @@ For the rest of the catagorical data, One-Hot-Encoding method was used.
 
 In this step, the data is handled based on the problem found during the data understanding phase. Based on the finding, the following steps are executed:
 
-a) Dropped columns that had over 77% of missing values. 
+a) Dropped columns that had >= 77% of missing values. 
 
 b) After step (a), removed rows with NULL values.
 
-c) Duplicate data was found and removed.
+c) There was no duplicate data to address upon executing (a) and (b). Note: Original data did have duplicate data.
 
 
 
 ## 2.2 Final Data (post cleaning and transformation)
 
-The shape data after cleaning : (1215655, 39)
+The shape data after cleaning : (99976, 37)
 
-![AIML-Portfolio-Melicious-Attack-Classifiers/images/pie_benign_malicious_after_cleaning_data.png at main · bhaswarey/AIML-Portfolio-Melicious-Attack-Classifiers](https://github.com/bhaswarey/AIML-Portfolio-Melicious-Attack-Classifiers/blob/main/images/pie_benign_malicious_after_cleaning_data.png) 
-
-**Figure 3 - Level 1 Target Feature Post Data Cleaning**
-
-In Figure 3, the disbribution of  'Label' distribution between 'benign' or 'melicious' (binary classification).
+In Figure 2, the disbribution of  'Label' distribution between 'benign' or 'melicious' (binary classification) is provided.
 
 
 
 ![AIML-Portfolio-Melicious-Attack-Classifiers/images/benign_malicious_attacktype.png at main · bhaswarey/AIML-Portfolio-Melicious-Attack-Classifiers](https://github.com/bhaswarey/AIML-Portfolio-Melicious-Attack-Classifiers/blob/main/images/benign_malicious_attacktype.png) 
 
-**Figure 4 - Level 2 Target Feature Post Data Cleaning**
+**Figure 3 - Level 2 Target Feature 'Attack Type' ('Y') Post Data Cleaning**
 
-In Figure 4, the disbribution of  'Attack Type' distribution (multi-class classification).
+In Figure 3, the disbribution of  'Attack Type' (target feature 'Y' multi-class classification).
 
 Clearly imbalances in the Attack Type categories (classification of malicious attacks). The most noticeable are:
 
@@ -499,9 +643,7 @@ Figure 4 provides a view of the categorical features and the category distributi
 
 **Figure 4 - Categorical Features**
 
-In Figure 4, the disbribution of the feature categories is presented, providing a hint as to which feature and associated categories may influence 'Label' outcome as 'benign' or 'melicious' (level 1 classification). 
-
-Figure 3 provides 'Label' breakdown into 'Attack Type', providing a drill down view of messages that are classified as melicious (via binary classification) into the type of melicious attack categories (via multi-class classification) 
+Note:  In Figure 3, the disbribution of the feature categories is presented, providing a hint as to which feature and associated categories may influence 'Label' outcome as 'benign' or 'melicious' (level 1 classification).  
 
 
 
@@ -509,55 +651,41 @@ Figure 3 provides 'Label' breakdown into 'Attack Type', providing a drill down v
 
 **Figure 5 - Distribution of Benign and Malicious messages across Proto categories**
 
-Figure 5 provides a view of the message Proto categories and their association to 'Label' classification. Fore example, 'icmp' protocol based messages have a very high likelihood of being benign. Where as 'tcp' protocol based messages are highly likelihood of being malicious.
-
-
-
- ![AIML-Portfolio-Melicious-Attack-Classifiers/images/proto_benign_malicious.png at main · bhaswarey/AIML-Portfolio-Melicious-Attack-Classifiers](https://github.com/bhaswarey/AIML-Portfolio-Melicious-Attack-Classifiers/blob/main/images/proto_benign_malicious.png) 
-
-**Figure 6 - Malicious Vs Benign distribution per Proto category**
+Figure 5 provides a view of the message Proto categories and their association to 'Label' classification. For example, 'icmp' protocol based messages have a very high likelihood of being benign. Where as 'tcp' protocol based messages are highly likelihood of being malicious.
 
 
 
  ![AIML-Portfolio-Melicious-Attack-Classifiers/images/proto_benign_malicious.png at main · bhaswarey/AIML-Portfolio-Melicious-Attack-Classifiers](https://github.com/bhaswarey/AIML-Portfolio-Melicious-Attack-Classifiers/blob/main/images/Proto_benign_malicious_distribution.png) 
 
-**Figure 7 - Comparitive view - Malicious Vs Benign distribution per Proto category**
+**Figure 6 - Comparitive view - Malicious Vs Benign distribution per Proto category**
 
 
 
-Figure 6/7 provides a view of the message protocol categories and their association to 'Label' classification. For example, 'icmp' protocol based messages have a very high likelihood of being benign. Where as 'tcp' protocol based messages are highly likely to be of malicious type.
+Figure 5/6 provides a view of the message protocol categories and their association to 'Label' classification. For example, 'icmp' protocol based messages have a very high likelihood of being benign. Where as 'tcp' protocol based messages are highly likely to be of malicious type.
 
 
 
  ![AIML-Portfolio-Melicious-Attack-Classifiers/images/proto_benign_malicious.png at main · bhaswarey/AIML-Portfolio-Melicious-Attack-Classifiers](https://github.com/bhaswarey/AIML-Portfolio-Melicious-Attack-Classifiers/blob/main/images/State_benign_malicious_distribution.png) 
 
-**Figure 8 - Malicious Vs Benign distribution per State category**
+**Figure 7 - Malicious Vs Benign distribution per State category**
 
-Figure 8 provides a view of the session state categories and their association to 'Label' classification. For example, 'RST', 'FIN' states have a very high likelihood of being malicious. Where as 'ECO' protocol based messages are highly likely to be of benign type.
-
-
-
- ![AIML-Portfolio-Melicious-Attack-Classifiers/images/proto_benign_malicious.png at main · bhaswarey/AIML-Portfolio-Melicious-Attack-Classifiers](https://github.com/bhaswarey/AIML-Portfolio-Melicious-Attack-Classifiers/blob/main/images/Cause_benign_malicious_distribution.png) 
-
-**Figure 9 - Malicious Vs Benign distribution per Cause category**
-
-Figure 9 provides a view of the cause categories and their association to 'Label' classification. Shutdown cause is associated with messsages that are benign. Messages associated with Status cause has roughly 2/3 chance of being malicious.
+Figure 7 provides a view of the session state categories and their association to 'Label' classification. For example, 'RST', 'FIN' states have a very high likelihood of being malicious. Where as 'ECO' protocol based messages are highly likely to be of benign type.
 
 
 
  ![AIML-Portfolio-Melicious-Attack-Classifiers/images/proto_benign_malicious.png at main · bhaswarey/AIML-Portfolio-Melicious-Attack-Classifiers](https://github.com/bhaswarey/AIML-Portfolio-Melicious-Attack-Classifiers/blob/main/images/sDSb_benign_malicious_distribution.png) 
 
-**Figure 10 - Malicious Vs Benign distribution per sDSb category**
+**Figure 8 - Malicious Vs Benign distribution per sDSb category**
 
-Figure 10 provides a view of the sDSb categories and their association to 'Label' classification. With the exception of 'cs0', all sDSb types are associated with messsages that are benign. Messages associated with 'cs0' has little less than 2/3 chance of being malicious.
+Figure 8 provides a view of the sDSb categories and their association to 'Label' classification. With the exception of 'cs0', all sDSb types are associated with messsages that are benign. Messages associated with 'cs0' has little less than 2/3 chance of being malicious.
 
 
 
-From the distribution presented above, it is clear the following features influence the 'y' (Label) outcome:
+From the distribution presented above, it is clear the following features influence the 'Y' (target feature Label) outcome:
 
-a) From a Label (as 'Y') prespective, the cleaned data is not as imbalanced.
+a) From the target feature Label (as 'Y') prespective, the cleaned data is not as imbalanced.
 
-b) From a Attack Type (as 'Y') prespective, the cleaned data is imbalanced. 
+b) From the target feature Attack Type (as 'Y') prespective, the cleaned data is imbalanced. 
 
 b) Over half of the malicious messages are of type 'UDPFlood'.
 
@@ -567,87 +695,75 @@ d) Messages not associated with feature category of type sDSb ''cs0' are benign.
 
 
 
-
-
 ### 3.1.2 Addressing Business Questions
 
 Following were some of the business questions answered based on the analysis of the data.
 
-**1) In the case of Malicious messages, what is the protocol the business should focus on to prevent majority of the malicious attacks?**
+**1) In the case of malicious messages, what is the most used protocol to launch an attack? - focusing on specific protocol to help prevent majority of the malicious attacks.**
 
-Figure 11 Malicious messages distribution across all Proto feature categories. 
+Figure 9 Malicious messages distribution across all Proto feature categories. 
 
 
 
  ![AIML-Portfolio-Melicious-Attack-Classifiers/images/proto_benign_malicious.png at main · bhaswarey/AIML-Portfolio-Melicious-Attack-Classifiers](https://github.com/bhaswarey/AIML-Portfolio-Melicious-Attack-Classifiers/blob/main/images/attack_type_dist.png) 
 
-**Figure 11 - Malicious message distrubution across Proto category types**
+**Figure 9 - Malicious message distribution across Proto category types**
 
 
 
-Over 70% of the malicious message are based on protocol of type 'udp' . The next to protocols use are 'HTTPFlood' and 'SlowrateDoS', which are less than 10% of the overall malicious messages.  
+Over 70% of the malicious message are based on protocol of type 'udp' . The other protocol use is 'tcp', which is less than 10% of the overall malicious messages.  
 
 
 
-**2) Identify assets to detect/prevent majority of the attacks? **
+**2) Identify the features of an application/appliance to detect/prevent majority of the attacks? **
 
-Lets identify malicious message protocol/network features that standout. 
+Lets identify malicious message associated protocol/network features that standout. 
 
 
 
  ![AIML-Portfolio-Melicious-Attack-Classifiers/images/proto_benign_malicious.png at main · bhaswarey/AIML-Portfolio-Melicious-Attack-Classifiers](https://github.com/bhaswarey/AIML-Portfolio-Melicious-Attack-Classifiers/blob/main/images/proto_attacktypes.png) 
 
-**Figure 12 - Breakdown of malicious message across Attack Type per network protocol**
+**Figure 10 - Breakdown of malicious message across Attack Type per network protocol**
 
 
 
-From Figure 12, it is clear that:
+From Figure 10, it is clear that:
 
 A)  Majority of the attacks are of UDP protocal based UDPFlood attack method
 
-B) In the case of malicious messages using TCP protocol, the messages utilize HTTPFlood and SlowrateDoS attack methods.
+B) In the case of malicious messages using TCP protocol, the attack method utilized are HTTPFlood and SlowrateDoS.
 
 
 
  ![AIML-Portfolio-Melicious-Attack-Classifiers/images/proto_benign_malicious.png at main · bhaswarey/AIML-Portfolio-Melicious-Attack-Classifiers](https://github.com/bhaswarey/AIML-Portfolio-Melicious-Attack-Classifiers/blob/main/images/sdsb_attacktypes.png) 
 
-**Figure 13 - Breakdown of malicious message across Attack Type per destination diff serve byte value (sDSb)**
+**Figure 11 - Breakdown of malicious message across Attack Type per destination diff serve byte value (sDSb)**
 
 
 
-From Figure 13, it is clear that:
+From Figure 11, it is clear that:
 
-A)  Majority of the attacks are of sDSb cs0 attacks utilizing SlowrateDoS
+A)  Majority of the attacks are of sDSb cs0 attacks utilizing SlowrateDoS attack method.
 
-B) Remaining malicious messages utilize SYNScan, TCPConnectiotScan, UDPScan, HTTPFlood, and SlowrateDoS.
-
-
-
- ![AIML-Portfolio-Melicious-Attack-Classifiers/images/proto_benign_malicious.png at main · bhaswarey/AIML-Portfolio-Melicious-Attack-Classifiers](https://github.com/bhaswarey/AIML-Portfolio-Melicious-Attack-Classifiers/blob/main/images/cause_attacktypes.png) 
-
-**Figure 14 - Breakdown of malicious message across Attack Type per cause code**
+B) Remaining malicious messages utilize SYNScan, TCPConnectiotScan, UDPScan, HTTPFlood, and SlowrateDoS attack methods.
 
 
 
-From Figure 14 provides the following information:
+ ![AIML-Portfolio-Melicious-Attack-Classifiers/images/proto_benign_malicious.png at main · bhaswarey/AIML-Portfolio-Melicious-Attack-Classifiers](https://github.com/bhaswarey/AIML-Portfolio-Melicious-Attack-Classifiers/blob/main/images/state_attacktypes.png) 
 
-A)  Majority of the malicious message associated with casue code Status using UDPFlood, HTTPFlood, and SlowrateDoS attack methods 
-
-B) Remaining malicious messages are associated with cause code Start using SYNCScan, TCPCommectScan, UDPScan, UDPFlood, SYNCFlood, HTTPFlood, and SlowrateDoS.
+**Figure 12 - Breakdown of malicious message across Attack Type per connection state**
 
 
 
- ![AIML-Portfolio-Melicious-Attack-Classifiers/images/proto_benign_malicious.png at main · bhaswarey/AIML-Portfolio-Melicious-Attack-Classifiers](https://github.com/bhaswarey/AIML-Portfolio-Melicious-Attack-Classifiers/blob/main/images/cause_attacktypes.png) 
-
-**Figure 15 - Breakdown of malicious message across Attack Type per connection state**
-
-
-
-From Figure 15 provides the following information:
+From Figure 12 provides the following information:
 
 A)  Majority of the malicious message associated with state REQ & INT use UDPFlood attack methods. 
 
-B) Remaining fewer malicious messages are associated with SYNCScan, TCPConnectScan, UDPScan, SYNCFlood, HTTPFlood, and SlowrateDoS.
+B) Remaining fewer malicious messages are associated with SYNCScan, TCPConnectScan, UDPScan, SYNCFlood, HTTPFlood, and SlowrateDoS attack method.
+
+
+
+In conclusion, application/appliance that can scan UDP protocol to detect anomalies associated with messages using  sDBs and State  can help detect and prevent majority of the malicious attacks.
 
 
 
@@ -663,7 +779,7 @@ NOTE:
 The numerical features were evaluated via correlation matrix and features with > 80% correlation were dropped. 
 
 ```
-Features Dropped: ['RunTime', 'Mean', 'Sum', 'Min', 'Max', 'SrcPkts', 'TotBytes', 'SrcBytes', 'DstBytes', 'Offset', 'sMeanPktSz', 'DstLoad', 'Rate', 'SrcRate', 'DstRate']
+Features to Drop: ['RunTime', 'Mean', 'Sum', 'Min', 'Max', 'SrcPkts', 'TotBytes', 'SrcBytes', 'DstBytes', 'sMeanPktSz', 'SrcLoad', 'DstLoad', 'Rate', 'SrcRate', 'DstRate']
 ```
 
 Following are the results after dropping the identified features. 
@@ -672,15 +788,15 @@ Following are the results after dropping the identified features.
 
  ![AIML-Portfolio-Melicious-Attack-Classifiers/images/proto_benign_malicious.png at main · bhaswarey/AIML-Portfolio-Melicious-Attack-Classifiers](https://github.com/bhaswarey/AIML-Portfolio-Melicious-Attack-Classifiers/blob/main/images/pairplot_numeric_features_label.png) 
 
-**Figure 16 - Pair-plot of features aganist 'Label'**
+**Figure 13 - Pair-plot of features aganist target feature 'Label' ('Y') **
 
  ![AIML-Portfolio-Melicious-Attack-Classifiers/images/proto_benign_malicious.png at main · bhaswarey/AIML-Portfolio-Melicious-Attack-Classifiers](https://github.com/bhaswarey/AIML-Portfolio-Melicious-Attack-Classifiers/blob/main/images/pairplot_numeric_features_attack_type.png) 
 
-**Figure 17 - Pair-plot of features aganist 'Attack Type'**
+**Figure 14 - Pair-plot of features aganist target feature 'Attack Type' ('Y')**
 
  ![AIML-Portfolio-Melicious-Attack-Classifiers/images/proto_benign_malicious.png at main · bhaswarey/AIML-Portfolio-Melicious-Attack-Classifiers](https://github.com/bhaswarey/AIML-Portfolio-Melicious-Attack-Classifiers/blob/main/images/heatmap_numeric_features_encoded.png) 
 
-**Figure 18 - Heatmap of features aganist 'Label' and Attack Type'**
+**Figure 15 - Heatmap of features aganist 'Label' and 'Attack Type'**
 
 
 
@@ -727,6 +843,101 @@ The pre-process is defined to transform the categorical features to numerical va
 
 For the rest of the features, "OneHotEncoder" was used because the categorical values did not have inherent order or ranking.
 
+Here are the results:
+
+Shape - 99976, 39)
+
+```
+<class 'pandas.core.frame.DataFrame'>
+RangeIndex: 99976 entries, 0 to 99975
+Data columns (total 39 columns):
+ #   Column           Non-Null Count  Dtype  
+---  ------           --------------  -----  
+ 0   level_0          99976 non-null  int64  
+ 1   Dur              99976 non-null  float64
+ 2   sTos             99976 non-null  float64
+ 3   sTtl             99976 non-null  float64
+ 4   sHops            99976 non-null  float64
+ 5   TotPkts          99976 non-null  int64  
+ 6   DstPkts          99976 non-null  int64  
+ 7   Offset           99976 non-null  int64  
+ 8   dMeanPktSz       99976 non-null  float64
+ 9   Load             99976 non-null  float64
+ 10  Loss             99976 non-null  int64  
+ 11  SrcLoss          99976 non-null  int64  
+ 12  DstLoss          99976 non-null  int64  
+ 13  pLoss            99976 non-null  float64
+ 14  TcpRtt           99976 non-null  float64
+ 15  SynAck           99976 non-null  float64
+ 16  AckDat           99976 non-null  float64
+ 17  Label            99976 non-null  int64  
+ 18  Attack Type      99976 non-null  int64  
+ 19  Proto_icmp       99976 non-null  float64
+ 20  Proto_ipv6-icmp  99976 non-null  float64
+ 21  Proto_sctp       99976 non-null  float64
+ 22  Proto_tcp        99976 non-null  float64
+ 23  sDSb_4           99976 non-null  float64
+ 24  sDSb_52          99976 non-null  float64
+ 25  sDSb_af11        99976 non-null  float64
+ 26  sDSb_af12        99976 non-null  float64
+ 27  sDSb_af41        99976 non-null  float64
+ 28  sDSb_cs4         99976 non-null  float64
+ 29  sDSb_cs6         99976 non-null  float64
+ 30  sDSb_cs7         99976 non-null  float64
+ 31  State_ACC        99976 non-null  float64
+ 32  State_CON        99976 non-null  float64
+ 33  State_FIN        99976 non-null  float64
+ 34  State_INT        99976 non-null  float64
+ 35  State_REQ        99976 non-null  float64
+ 36  State_RSP        99976 non-null  float64
+ 37  State_RST        99976 non-null  float64
+ 38  State_TST        99976 non-null  float64
+dtypes: float64(30), int64(9)
+memory usage: 29.7 MB
+None
+   level_0       Dur  sTos  sTtl  sHops  TotPkts  DstPkts    Offset  \
+0        0  4.564231   0.0  63.0    1.0        3        0  12409860   
+1        1  0.000000   0.0  63.0    1.0        1        0  12002540   
+2        2  2.584038   0.0  63.0    1.0        2        0  20161452   
+3        3  2.586121   0.0  63.0    1.0        2        0   3481588   
+4        4  4.987077   0.0  64.0    0.0       43       21   2044388   
+
+    dMeanPktSz          Load  Loss  SrcLoss  DstLoss  pLoss    TcpRtt  \
+0     0.000000    147.231812     0        0        0    0.0  0.000000   
+1     0.000000      0.000000     0        0        0    0.0  0.000000   
+2     0.000000    130.029053     0        0        0    0.0  0.000000   
+3     0.000000    129.924316     0        0        0    0.0  0.000000   
+4  1217.238037  44908.066410     0        0        0    0.0  0.034837   
+
+     SynAck    AckDat  Label  Attack Type  Proto_icmp  Proto_ipv6-icmp  \
+0  0.000000  0.000000      1            1         0.0              0.0   
+1  0.000000  0.000000      1            1         0.0              0.0   
+2  0.000000  0.000000      0            0         0.0              0.0   
+3  0.000000  0.000000      1            1         0.0              0.0   
+4  0.020551  0.014286      0            0         0.0              0.0   
+
+   Proto_sctp  Proto_tcp  sDSb_4  sDSb_52  sDSb_af11  sDSb_af12  sDSb_af41  \
+0         0.0        0.0     0.0      0.0        0.0        0.0        0.0   
+1         0.0        0.0     0.0      0.0        0.0        0.0        0.0   
+2         0.0        0.0     0.0      0.0        0.0        0.0        0.0   
+3         0.0        0.0     0.0      0.0        0.0        0.0        0.0   
+4         0.0        1.0     0.0      0.0        0.0        0.0        0.0   
+
+   sDSb_cs4  sDSb_cs6  sDSb_cs7  State_ACC  State_CON  State_FIN  State_INT  \
+0       0.0       0.0       0.0        0.0        0.0        0.0        0.0   
+1       0.0       0.0       0.0        0.0        0.0        0.0        0.0   
+2       0.0       0.0       0.0        0.0        0.0        0.0        0.0   
+3       0.0       0.0       0.0        0.0        0.0        0.0        1.0   
+4       0.0       0.0       0.0        0.0        1.0        0.0        0.0   
+
+   State_REQ  State_RSP  State_RST  State_TST  
+0        1.0        0.0        0.0        0.0  
+1        1.0        0.0        0.0        0.0  
+2        1.0        0.0        0.0        0.0  
+3        0.0        0.0        0.0        0.0  
+4        0.0        0.0        0.0        0.0  
+```
+
 ### 5.1.2   Modeling Technique 
 
 The models that will be evaluated are:
@@ -734,9 +945,9 @@ The models that will be evaluated are:
 -  Logistic Regression
 - KNN
 - Decision Tree
-- SVM (Note: Due to time constraints, this model requires a very long runtime due to the very large size of data in terems of rows and thefore will not be used)
+- SVM  
 
-Following steps were taken to deterime the best model using default hyper parameters:
+Following steps were taken to deterime the best model using default hyperparameters:
 
 a) Use of GridSerachCV to help identify the best hyperparameters for each model.
 
@@ -758,10 +969,10 @@ GridSearchCV will be used for each model to find the optimal hyper parameters.
 
 ### 5.1.5   Refining Data
 
-Per the results presented in Figure 18, following features were further identified to have correlation above 80% were dropped:
+Per the results presented in Figure 15, following features were further identified to have correlation above 80% were dropped:
 
 ```
-Features to Drop: ['Proto_udp', 'sDSb_cs0', 'sDSb_ef', 'Cause_Status', 'State_ECO', 'State_NRS', 'State_URP']
+Features to Drop: ['Proto_udp', 'sDSb_39', 'sDSb_cs0', 'sDSb_ef', 'State_ECO', 'State_NRS', 'State_URP']
 ```
 
 
@@ -773,99 +984,105 @@ Features to Drop: ['Proto_udp', 'sDSb_cs0', 'sDSb_ef', 'Cause_Status', 'State_EC
 The dataset was split as follows:
 
 ```
-Xbin_train shape = (850958, 41)
- Xbin_test shape = (364697, 41)
-ybin_train shape = (850958,)
- ybin_test shape = (364697,)
+Xbin_train shape = (69983, 37)
+ Xbin_test shape = (29993, 37)
+ybin_train shape = (69983,)
+ ybin_test shape = (29993,)
 ```
 
 Following is a sample view of the normal data:
 
-|      |       Seq |       Dur |      sTos |      sTtl |     sHops |   TotPkts |   DstPkts | dMeanPktSz |      Load |   SrcLoad |      Loss |   SrcLoss |  DstLoss |    pLoss |    TcpRtt |    SynAck |    AckDat | Proto_icmp | Proto_ipv6-icmp | Proto_sctp | Proto_tcp |   sDSb_39 |    sDSb_4 |   sDSb_52 |   sDSb_54 | sDSb_af11 | sDSb_af12 | sDSb_af41 |  sDSb_cs4 |  sDSb_cs6 |  sDSb_cs7 | Cause_Shutdown | Cause_Start | State_ACC | State_CON | State_FIN | State_INT | State_REQ | State_RSP | State_RST | State_TST |
-| ---: | --------: | --------: | --------: | --------: | --------: | --------: | --------: | ---------: | --------: | --------: | --------: | --------: | -------: | -------: | --------: | --------: | --------: | ---------: | --------------: | ---------: | --------: | --------: | --------: | --------: | --------: | --------: | --------: | --------: | --------: | --------: | --------: | -------------: | ----------: | --------: | --------: | --------: | --------: | --------: | --------: | --------: | --------: |
-|    0 |  2.070873 | -0.807021 | -0.069237 | -0.329345 | -0.352366 | -0.165054 | -0.111893 |  -0.287842 | -0.008214 | -0.010969 | -0.091038 | -0.074202 | -0.06135 | -0.09457 | -0.265714 | -0.044344 | -0.388247 |   -0.15843 |       -0.001533 |  -0.060035 | -0.544995 | -0.001084 | -0.007817 | -0.010342 | -0.001084 | -0.025616 | -0.010455 |   -0.0204 | -0.009199 | -0.023307 | -0.020687 |      -0.024247 |   -0.816894 | -0.030114 | -0.349244 | -0.226162 | -0.608926 |  1.031632 | -0.007511 | -0.257647 | -0.004336 |
-|    1 | -0.619749 |  0.715383 | -0.069237 | -0.329345 | -0.352366 | -0.125414 | -0.111893 |  -0.287842 | -0.008214 | -0.010957 | -0.091038 | -0.074202 | -0.06135 | -0.09457 | -0.265714 | -0.044344 | -0.388247 |   -0.15843 |       -0.001533 |  -0.060035 | -0.544995 | -0.001084 | -0.007817 | -0.010342 | -0.001084 | -0.025616 | -0.010455 |   -0.0204 | -0.009199 | -0.023307 | -0.020687 |      -0.024247 |   -0.816894 | -0.030114 | -0.349244 | -0.226162 | -0.608926 |  1.031632 | -0.007511 | -0.257647 | -0.004336 |
-|    2 | -0.781195 | -0.807021 | -0.069237 | -0.329345 | -0.352366 | -0.165054 | -0.034843 |   0.018933 | -0.008214 | -0.010969 | -0.091038 | -0.074202 | -0.06135 | -0.09457 |  5.078216 |  0.081540 |  8.386164 |   -0.15843 |       -0.001533 |  -0.060035 |  1.834878 | -0.001084 | -0.007817 | -0.010342 | -0.001084 | -0.025616 | -0.010455 |   -0.0204 | -0.009199 | -0.023307 | -0.020687 |      -0.024247 |   -0.816894 | -0.030114 | -0.349244 | -0.226162 | -0.608926 | -0.969338 | -0.007511 |  3.881275 | -0.004336 |
-|    3 | -0.967806 |  0.720621 | -0.069237 | -0.329345 | -0.352366 | -0.125414 | -0.111893 |  -0.287842 | -0.008214 | -0.010958 | -0.091038 | -0.074202 | -0.06135 | -0.09457 | -0.265714 | -0.044344 | -0.388247 |   -0.15843 |       -0.001533 |  -0.060035 | -0.544995 | -0.001084 | -0.007817 | -0.010342 | -0.001084 | -0.025616 | -0.010455 |   -0.0204 | -0.009199 | -0.023307 | -0.020687 |      -0.024247 |   -0.816894 | -0.030114 | -0.349244 | -0.226162 | -0.608926 |  1.031632 | -0.007511 | -0.257647 | -0.004336 |
-|    4 |  0.583671 |  0.715967 | -0.069237 | -0.329345 | -0.352366 | -0.125414 | -0.111893 |  -0.287842 | -0.008214 | -0.010957 | -0.091038 | -0.074202 | -0.06135 | -0.09457 | -0.265714 | -0.044344 | -0.388247 |   -0.15843 |       -0.001533 |  -0.060035 | -0.544995 | -0.001084 | -0.007817 | -0.010342 | -0.001084 | -0.025616 | -0.010455 |   -0.0204 | -0.009199 | -0.023307 | -0.020687 |                |             |           |           |           |           |           |           |           |           |
+|      |   level_0 |       Dur |      sTos |      sTtl |     sHops |   TotPkts |   DstPkts |    Offset | dMeanPktSz |      Load |      Loss |   SrcLoss |   DstLoss |     pLoss |    TcpRtt |    SynAck |    AckDat | Proto_icmp | Proto_ipv6-icmp | Proto_sctp | Proto_tcp |   sDSb_4 |   sDSb_52 | sDSb_af11 | sDSb_af12 | sDSb_af41 |  sDSb_cs4 |  sDSb_cs6 |  sDSb_cs7 | State_ACC | State_CON | State_FIN | State_INT | State_REQ | State_RSP | State_RST | State_TST |
+| ---: | --------: | --------: | --------: | --------: | --------: | --------: | --------: | --------: | ---------: | --------: | --------: | --------: | --------: | --------: | --------: | --------: | --------: | ---------: | --------------: | ---------: | --------: | -------: | --------: | --------: | --------: | --------: | --------: | --------: | --------: | --------: | --------: | --------: | --------: | --------: | --------: | --------: | --------: |
+|    0 | -0.294618 |  0.720003 | -0.069182 | -0.333087 | -0.353128 | -0.122447 | -0.111416 |  0.693212 |  -0.286001 | -0.010133 | -0.100388 | -0.080038 | -0.062391 | -0.098954 | -0.274138 | -0.045576 | -0.381555 |  -0.157929 |        -0.00378 |  -0.061184 | -0.542983 | -0.00756 | -0.010692 | -0.027005 | -0.010692 | -0.020006 | -0.006547 | -0.022369 | -0.020006 | -0.031642 | -0.346897 | -0.223800 | -0.609654 |  1.029838 |  -0.00756 | -0.259771 |  -0.00378 |
+|    1 |  0.829196 |  1.903937 | -0.069182 | -0.333087 | -0.353128 | -0.122447 | -0.111416 | -0.485651 |  -0.286001 | -0.010133 | -0.100388 | -0.080038 | -0.062391 | -0.098954 | -0.274138 | -0.045576 | -0.381555 |  -0.157929 |        -0.00378 |  -0.061184 | -0.542983 | -0.00756 | -0.010692 | -0.027005 | -0.010692 | -0.020006 | -0.006547 | -0.022369 | -0.020006 | -0.031642 | -0.346897 | -0.223800 | -0.609654 |  1.029838 |  -0.00756 | -0.259771 |  -0.00378 |
+|    2 | -0.137235 |  0.551559 | -0.069182 | -0.333087 | -0.353128 | -0.122447 | -0.111416 | -0.005500 |  -0.286001 | -0.010132 | -0.100388 | -0.080038 | -0.062391 | -0.098954 | -0.274138 | -0.045576 | -0.381555 |  -0.157929 |        -0.00378 |  -0.061184 | -0.542983 | -0.00756 | -0.010692 | -0.027005 | -0.010692 | -0.020006 | -0.006547 | -0.022369 | -0.020006 | -0.031642 | -0.346897 | -0.223800 | -0.609654 |  1.029838 |  -0.00756 | -0.259771 |  -0.00378 |
+|    3 | -1.715936 |  1.779365 | -0.069182 | -0.333087 | -0.353128 |  0.503027 |  0.735918 | -0.490266 |   4.813713 | -0.010103 | -0.100388 | -0.080038 | -0.062391 | -0.098954 |  1.253659 |  0.131864 |  1.832953 |  -0.157929 |        -0.00378 |  -0.061184 |  1.841678 | -0.00756 | -0.010692 | -0.027005 | -0.010692 | -0.020006 | -0.006547 | -0.022369 | -0.020006 | -0.031642 |  2.882701 | -0.223800 | -0.609654 | -0.971027 |  -0.00756 | -0.259771 |  -0.00378 |
+|    4 |  1.394112 | -0.808060 | -0.069182 | -0.333087 | -0.353128 | -0.122447 | -0.034386 | -0.637469 |   0.023486 | -0.010133 | -0.100388 | -0.080038 | -0.062391 | -0.098954 |  1.740533 |  0.053290 |  2.694088 |  -0.157929 |        -0.00378 |  -0.061184 |  1.841678 | -0.00756 | -0.010692 | -0.027005 | -0.010692 | -0.020006 | -0.006547 | -0.022369 | -0.020006 | -0.031642 | -0.346897 |  4.468282 | -0.609654 | -0.971027 |  -0.00756 | -0.259771 |  -0.00378 |
 
 
 
-### 5.2.2   Binary Classification - Model Comparison 
+### 5.2.2   Binary Classification - Model Comparison Results
 
-
-
-Following is the comparison between the 3 models:
+Following is the comparison between the 4 models:
 
 ```
-                   Model  Train Accuracy  Test Accuracy
-0  Logistic Regression        0.990149       0.990104
-1                  KNN        0.999700       0.999548
-2        Decision Tree        0.999766       0.999619
+       					 Model  Train Accuracy  Test Accuracy
+0  Logistic Regression        0.960319       0.962491
+1                  KNN        1.000000       0.971827
+2        Decision Tree        0.983725       0.972027
+3                  SVC        0.982810       0.963758
 ```
+
+```
+
+```
+
+ 
 
 | algorithm | params |                                        mean_score | std_score | cv_result |                                                   |
 | --------: | -----: | ------------------------------------------------: | --------: | --------: | ------------------------------------------------- |
-|         0 |     LR | {'C': 4.281332398719396, 'max_iter': 2500, 'mu... |  0.990146 |  0.000150 | {'mean_fit_time': [1.467014233271281, 1.580855... |
-|         1 |    KNN | {'metric': 'manhattan', 'n_neighbors': 5, 'wei... |  0.999521 |  0.000026 | {'mean_fit_time': [1.7499810059865315, 2.31384... |
-|         2 |     DT | {'criterion': 'entropy', 'max_depth': 10, 'min... |  0.999706 |  0.000014 | {'mean_fit_time': [1.6299346288045247, 1.79270... |
+|         0 |     LR | {'C': 11.288378916846883, 'max_iter': 5000, 'm... |  0.960219 |  0.000787 | {'mean_fit_time': [0.006623983383178711, 0.005... |
+|         1 |    KNN | {'metric': 'manhattan', 'n_neighbors': 13, 'we... |  0.971822 |  0.000192 | {'mean_fit_time': [0.007259686787923177, 0.011... |
+|         2 |     DT | {'criterion': 'entropy', 'max_depth': 10, 'min... |  0.983110 |  0.000793 | {'mean_fit_time': [0.05327630043029785, 0.0530... |
+|         3 |    SVC |          {'C': 1000, 'gamma': 1, 'kernel': 'rbf'} |  0.978195 |  0.000647 | {'mean_fit_time': [1671.4753562609355, 1586.56... |
 
 
 
- ![AIML-Portfolio-Melicious-Attack-Classifiers/images/proto_benign_malicious.png at main · bhaswarey/AIML-Portfolio-Melicious-Attack-Classifiers](https://github.com/bhaswarey/AIML-Portfolio-Melicious-Attack-Classifiers/blob/main/images/confusion_matrix_binary.png) 
+![AIML-Portfolio-Melicious-Attack-Classifiers/images/proto_benign_malicious.png at main · bhaswarey/AIML-Portfolio-Melicious-Attack-Classifiers](https://github.com/bhaswarey/AIML-Portfolio-Melicious-Attack-Classifiers/blob/main/images/confusion_matrix_binary.png) 
 
-**Figure 18 - Binary Classification - Confusion Matrix**
+**Figure 16 - Binary Classification - Confusion Matrix**
 
 
 
-Figure 18 provides th confusion matrix fo the three models with the following additional information per model:
+Figure 16 provides the confusion matrix for the four models with the following additional information per model:
 
 ```
-Model = LogisticRegression(C=4.281332398719396, max_iter=2500,
+Model = LogisticRegression(C=11.288378916846883, max_iter=5000,
                    multi_class='multinomial', solver='sag') AUC = 0.99
 
-Model = KNeighborsClassifier(metric='manhattan') AUC = 1.0
+Model = KNeighborsClassifier(metric='manhattan', n_neighbors=13, weights='distance') AUC = 1.0
 
 Model = DecisionTreeClassifier(criterion='entropy', max_depth=10, min_samples_leaf=5) AUC = 1.0
+
+Model = SVC(C=1000, gamma=1, probability=True) AUC = 0.98
 ```
 
 
 
  ![AIML-Portfolio-Melicious-Attack-Classifiers/images/proto_benign_malicious.png at main · bhaswarey/AIML-Portfolio-Melicious-Attack-Classifiers](https://github.com/bhaswarey/AIML-Portfolio-Melicious-Attack-Classifiers/blob/main/images/test_best_model_binary_confusion_matrix.png) 
 
-**Figure 19 - Best Model DecisionTreeClassifier Confusion Matrix with ROC Plot**
+**Figure 17 - Best Model (DecisionTreeClassifier) Confusion Matrix with ROC Plot**
 
 
 
 ### 5.2.3   Feature engineering and exploration 
 
- Figure 20 provides the important features there were the top selected feaures by the Decision Tree model.
+ Figure 18 provides the important features selected by the best model.
 
  ![AIML-Portfolio-Melicious-Attack-Classifiers/images/proto_benign_malicious.png at main · bhaswarey/AIML-Portfolio-Melicious-Attack-Classifiers](https://github.com/bhaswarey/AIML-Portfolio-Melicious-Attack-Classifiers/blob/main/images/bin_permutation_importance.png) 
 
-**Figure 20 - Important features selected by the best model**
+**Figure 18 - Important features selected by the best model**
 
 Base on the results presented in Figure 20, following are the important features identified by the model:
 
-a) Seq - 
+a) Offset  
 
 b) sTtl
 
-c) sHops
+c) State_INT
 
-d) Cause_Start
+d) Dur
 
-e) Proto_icmp
+e) sHops
 
-f) Dur
+f) Proto_icmp
 
-g) sTos
+g) TotPkts
 
-h) pLoss
+h) State_RST
 
-i) State_RST
-
-j) SyncAck
+i) TcpRtt
 
 
 
@@ -873,42 +1090,341 @@ These features are identified as important features based on binary classificati
 
 
 
-### 5.3.   Multi-class Classification
+Lets examine 'Offset', 'sTtl', 'Dur' from the important features selected by the model:
 
-### 
+
+
+ ![AIML-Portfolio-Melicious-Attack-Classifiers/images/proto_benign_malicious.png at main · bhaswarey/AIML-Portfolio-Melicious-Attack-Classifiers](https://github.com/bhaswarey/AIML-Portfolio-Melicious-Attack-Classifiers/blob/main/images/offset_density.png) 
+
+**Figure 19 - Benign & Malicious 'Offset' Density **
+
+
+
+ ![AIML-Portfolio-Melicious-Attack-Classifiers/images/proto_benign_malicious.png at main · bhaswarey/AIML-Portfolio-Melicious-Attack-Classifiers](https://github.com/bhaswarey/AIML-Portfolio-Melicious-Attack-Classifiers/blob/main/images/sttl_density.png) 
+
+**Figure 20 - Benign & Malicious 'sTtl' Density **
+
+
+
+ ![AIML-Portfolio-Melicious-Attack-Classifiers/images/proto_benign_malicious.png at main · bhaswarey/AIML-Portfolio-Melicious-Attack-Classifiers](https://github.com/bhaswarey/AIML-Portfolio-Melicious-Attack-Classifiers/blob/main/images/dur_density.png) 
+
+**Figure 21 - Benign & Malicious 'Dur' Density **
+
+
+
+
+
+### 5.3.   Multi-class Classification
 
 ### 5.3.1 Summary of Assessment Results 
 
 The dataset was split as follows:
 
 ```
-Xbin_train shape = (850958, 41)
- Xbin_test shape = (364697, 41)
-ybin_train shape = (850958,)
- ybin_test shape = (364697,)
+Xmc_train shape = (69983, 37)
+ Xmc_test shape = (29993, 37)
+ymc_train shape = (69983,)
+ ymc_test shape = (29993,)
 ```
 
 Following is a sample view of the normal data:
 
-|      |       Seq |       Dur |      sTos |      sTtl |     sHops |   TotPkts |   DstPkts | dMeanPktSz |      Load |   SrcLoad |      Loss |   SrcLoss |  DstLoss |    pLoss |    TcpRtt |    SynAck |    AckDat | Proto_icmp | Proto_ipv6-icmp | Proto_sctp | Proto_tcp |   sDSb_39 |    sDSb_4 |   sDSb_52 |   sDSb_54 | sDSb_af11 | sDSb_af12 | sDSb_af41 |  sDSb_cs4 |  sDSb_cs6 |  sDSb_cs7 | Cause_Shutdown | Cause_Start | State_ACC | State_CON | State_FIN | State_INT | State_REQ | State_RSP | State_RST | State_TST |
-| ---: | --------: | --------: | --------: | --------: | --------: | --------: | --------: | ---------: | --------: | --------: | --------: | --------: | -------: | -------: | --------: | --------: | --------: | ---------: | --------------: | ---------: | --------: | --------: | --------: | --------: | --------: | --------: | --------: | --------: | --------: | --------: | --------: | -------------: | ----------: | --------: | --------: | --------: | --------: | --------: | --------: | --------: | --------: |
-|    0 |  2.070873 | -0.807021 | -0.069237 | -0.329345 | -0.352366 | -0.165054 | -0.111893 |  -0.287842 | -0.008214 | -0.010969 | -0.091038 | -0.074202 | -0.06135 | -0.09457 | -0.265714 | -0.044344 | -0.388247 |   -0.15843 |       -0.001533 |  -0.060035 | -0.544995 | -0.001084 | -0.007817 | -0.010342 | -0.001084 | -0.025616 | -0.010455 |   -0.0204 | -0.009199 | -0.023307 | -0.020687 |      -0.024247 |   -0.816894 | -0.030114 | -0.349244 | -0.226162 | -0.608926 |  1.031632 | -0.007511 | -0.257647 | -0.004336 |
-|    1 | -0.619749 |  0.715383 | -0.069237 | -0.329345 | -0.352366 | -0.125414 | -0.111893 |  -0.287842 | -0.008214 | -0.010957 | -0.091038 | -0.074202 | -0.06135 | -0.09457 | -0.265714 | -0.044344 | -0.388247 |   -0.15843 |       -0.001533 |  -0.060035 | -0.544995 | -0.001084 | -0.007817 | -0.010342 | -0.001084 | -0.025616 | -0.010455 |   -0.0204 | -0.009199 | -0.023307 | -0.020687 |      -0.024247 |   -0.816894 | -0.030114 | -0.349244 | -0.226162 | -0.608926 |  1.031632 | -0.007511 | -0.257647 | -0.004336 |
-|    2 | -0.781195 | -0.807021 | -0.069237 | -0.329345 | -0.352366 | -0.165054 | -0.034843 |   0.018933 | -0.008214 | -0.010969 | -0.091038 | -0.074202 | -0.06135 | -0.09457 |  5.078216 |  0.081540 |  8.386164 |   -0.15843 |       -0.001533 |  -0.060035 |  1.834878 | -0.001084 | -0.007817 | -0.010342 | -0.001084 | -0.025616 | -0.010455 |   -0.0204 | -0.009199 | -0.023307 | -0.020687 |      -0.024247 |   -0.816894 | -0.030114 | -0.349244 | -0.226162 | -0.608926 | -0.969338 | -0.007511 |  3.881275 | -0.004336 |
-|    3 | -0.967806 |  0.720621 | -0.069237 | -0.329345 | -0.352366 | -0.125414 | -0.111893 |  -0.287842 | -0.008214 | -0.010958 | -0.091038 | -0.074202 | -0.06135 | -0.09457 | -0.265714 | -0.044344 | -0.388247 |   -0.15843 |       -0.001533 |  -0.060035 | -0.544995 | -0.001084 | -0.007817 | -0.010342 | -0.001084 | -0.025616 | -0.010455 |   -0.0204 | -0.009199 | -0.023307 | -0.020687 |      -0.024247 |   -0.816894 | -0.030114 | -0.349244 | -0.226162 | -0.608926 |  1.031632 | -0.007511 | -0.257647 | -0.004336 |
-|    4 |  0.583671 |  0.715967 | -0.069237 | -0.329345 | -0.352366 | -0.125414 | -0.111893 |  -0.287842 | -0.008214 | -0.010957 | -0.091038 | -0.074202 | -0.06135 | -0.09457 | -0.265714 | -0.044344 | -0.388247 |   -0.15843 |       -0.001533 |  -0.060035 | -0.544995 | -0.001084 | -0.007817 | -0.010342 | -0.001084 | -0.025616 | -0.010455 |   -0.0204 | -0.009199 | -0.023307 | -0.020687 |                |             |           |           |           |           |           |           |           |           |
+|      |   level_0 |       Dur |      sTos |      sTtl |     sHops |   TotPkts |   DstPkts |    Offset | dMeanPktSz |      Load |      Loss |   SrcLoss |   DstLoss |     pLoss |    TcpRtt |    SynAck |    AckDat | Proto_icmp | Proto_ipv6-icmp | Proto_sctp | Proto_tcp |   sDSb_4 |   sDSb_52 | sDSb_af11 | sDSb_af12 | sDSb_af41 |  sDSb_cs4 |  sDSb_cs6 |  sDSb_cs7 | State_ACC | State_CON | State_FIN | State_INT | State_REQ | State_RSP | State_RST | State_TST |
+| ---: | --------: | --------: | --------: | --------: | --------: | --------: | --------: | --------: | ---------: | --------: | --------: | --------: | --------: | --------: | --------: | --------: | --------: | ---------: | --------------: | ---------: | --------: | -------: | --------: | --------: | --------: | --------: | --------: | --------: | --------: | --------: | --------: | --------: | --------: | --------: | --------: | --------: | --------: |
+|    0 | -0.294618 |  0.720003 | -0.069182 | -0.333087 | -0.353128 | -0.122447 | -0.111416 |  0.693212 |  -0.286001 | -0.010133 | -0.100388 | -0.080038 | -0.062391 | -0.098954 | -0.274138 | -0.045576 | -0.381555 |  -0.157929 |        -0.00378 |  -0.061184 | -0.542983 | -0.00756 | -0.010692 | -0.027005 | -0.010692 | -0.020006 | -0.006547 | -0.022369 | -0.020006 | -0.031642 | -0.346897 | -0.223800 | -0.609654 |  1.029838 |  -0.00756 | -0.259771 |  -0.00378 |
+|    1 |  0.829196 |  1.903937 | -0.069182 | -0.333087 | -0.353128 | -0.122447 | -0.111416 | -0.485651 |  -0.286001 | -0.010133 | -0.100388 | -0.080038 | -0.062391 | -0.098954 | -0.274138 | -0.045576 | -0.381555 |  -0.157929 |        -0.00378 |  -0.061184 | -0.542983 | -0.00756 | -0.010692 | -0.027005 | -0.010692 | -0.020006 | -0.006547 | -0.022369 | -0.020006 | -0.031642 | -0.346897 | -0.223800 | -0.609654 |  1.029838 |  -0.00756 | -0.259771 |  -0.00378 |
+|    2 | -0.137235 |  0.551559 | -0.069182 | -0.333087 | -0.353128 | -0.122447 | -0.111416 | -0.005500 |  -0.286001 | -0.010132 | -0.100388 | -0.080038 | -0.062391 | -0.098954 | -0.274138 | -0.045576 | -0.381555 |  -0.157929 |        -0.00378 |  -0.061184 | -0.542983 | -0.00756 | -0.010692 | -0.027005 | -0.010692 | -0.020006 | -0.006547 | -0.022369 | -0.020006 | -0.031642 | -0.346897 | -0.223800 | -0.609654 |  1.029838 |  -0.00756 | -0.259771 |  -0.00378 |
+|    3 | -1.715936 |  1.779365 | -0.069182 | -0.333087 | -0.353128 |  0.503027 |  0.735918 | -0.490266 |   4.813713 | -0.010103 | -0.100388 | -0.080038 | -0.062391 | -0.098954 |  1.253659 |  0.131864 |  1.832953 |  -0.157929 |        -0.00378 |  -0.061184 |  1.841678 | -0.00756 | -0.010692 | -0.027005 | -0.010692 | -0.020006 | -0.006547 | -0.022369 | -0.020006 | -0.031642 |  2.882701 | -0.223800 | -0.609654 | -0.971027 |  -0.00756 | -0.259771 |  -0.00378 |
+|    4 |  1.394112 | -0.808060 | -0.069182 | -0.333087 | -0.353128 | -0.122447 | -0.034386 | -0.637469 |   0.023486 | -0.010133 | -0.100388 | -0.080038 | -0.062391 | -0.098954 |  1.740533 |  0.053290 |  2.694088 |  -0.157929 |        -0.00378 |  -0.061184 |  1.841678 | -0.00756 | -0.010692 | -0.027005 | -0.010692 | -0.020006 | -0.006547 | -0.022369 | -0.020006 | -0.031642 | -0.346897 |  4.468282 | -0.609654 | -0.971027 |  -0.00756 | -0.259771 |  -0.00378 |
 
 
 
 ### 5.3.2   Multi-class Classification Model Comparison
 
-TDB - pending completion of program execution - becasue of the size of the data, the program has been running for over a week now and is partially complete, i.e., binary classification is done but the multi-class classification part is still executing and that is why these sections are marked as TBD
+Following is the comparison between the 4 models:
+
+```
+     Model  Train Accuracy  Test Accuracy
+0  Logistic Regression        0.960790       0.941620
+1                  KNN        1.000000       0.968193
+2        Decision Tree        0.981095       0.951255
+3                  SVC        0.981353       0.963758
+```
+
+| algorithm | params |                                        mean_score | std_score | cv_result |                                                   |
+| --------: | -----: | ------------------------------------------------: | --------: | --------: | ------------------------------------------------- |
+|         0 |     LR | {'C': 545.5594781168514, 'max_iter': 100, 'mul... |  0.960162 |  0.000272 | {'mean_fit_time': [0.006397644678751628, 0.006... |
+|         1 |    KNN | {'metric': 'manhattan', 'n_neighbors': 13, 'we... |  0.968035 |  0.000519 | {'mean_fit_time': [0.007612864176432292, 0.010... |
+|         2 |     DT | {'criterion': 'gini', 'max_depth': 10, 'min_sa... |  0.979481 |  0.001875 | {'mean_fit_time': [0.0443574587504069, 0.04441... |
+|         3 |    SVC |          {'C': 1000, 'gamma': 1, 'kernel': 'rbf'} |  0.975551 |  0.001145 | {'mean_fit_time': [1149.4403246243794, 76.0082... |
+
+
+
+
+
+
+
+![AIML-Portfolio-Melicious-Attack-Classifiers/images/proto_benign_malicious.png at main · bhaswarey/AIML-Portfolio-Melicious-Attack-Classifiers](https://github.com/bhaswarey/AIML-Portfolio-Melicious-Attack-Classifiers/blob/main/images/confusion_matrix_multi-class.png) 
+
+**Figure 22 - Multi-class Classification - Confusion Matrix**
+
+
+
+Figure 22 provides the confusion matrix for the four models with the following additional information per model:
+
+```
+Model = LogisticRegression(C=545.5594781168514, multi_class='multinomial',
+                   solver='newton-cg') AUC = 1.0
+
+Model = KNeighborsClassifier(metric='manhattan', n_neighbors=13, weights='distance') AUC = 1.0
+
+Model = DecisionTreeClassifier(max_depth=10, min_samples_leaf=5) AUC = 1.0
+
+Model = SVC(C=1000, gamma=1, probability=True) AUC = 1.0
+```
+
+
+
+
+
+ ![AIML-Portfolio-Melicious-Attack-Classifiers/images/proto_benign_malicious.png at main · bhaswarey/AIML-Portfolio-Melicious-Attack-Classifiers](https://github.com/bhaswarey/AIML-Portfolio-Melicious-Attack-Classifiers/blob/main/images/test_best_model_multi-class_confusion_matrix.png) 
+
+**Figure 23 - Best Model (KNN) Confusion Matrix with ROC Plot**
 
 
 
 ### 5.3.3   Feature engineering and exploration 
 
-TDB - pending completion of program execution - becasue of the size of the data, the program has been running for over a week now and is partially complete, i.e., binary classification is done but the multi-class classification part is still executing and that is why these sections are marked as TBD
+ Figure 18 provides the important features selected by the best model.
+
+ ![AIML-Portfolio-Melicious-Attack-Classifiers/images/proto_benign_malicious.png at main · bhaswarey/AIML-Portfolio-Melicious-Attack-Classifiers](https://github.com/bhaswarey/AIML-Portfolio-Melicious-Attack-Classifiers/blob/main/images/multi-class_permutation_importance.png) 
+
+**Figure 24 - Important features selected by the best model**
+
+Base on the results presented in Figure 24, following are the important features identified by the model:
+
+a) Offset  
+
+b) sTtl
+
+c) sHops
+
+d) State_INT
+
+e) Proto_tco
+
+f) Dur
+
+etc ...
+
+
+
+Lets examine 'Offset', 'sTls', and 'sHops':
+
+ ![AIML-Portfolio-Melicious-Attack-Classifiers/images/proto_benign_malicious.png at main · bhaswarey/AIML-Portfolio-Melicious-Attack-Classifiers](https://github.com/bhaswarey/AIML-Portfolio-Melicious-Attack-Classifiers/blob/main/images/mc_offset_density.png) 
+
+**Figure 25 - Benign & Malicious 'Offset' Density **
+
+
+
+ ![AIML-Portfolio-Melicious-Attack-Classifiers/images/proto_benign_malicious.png at main · bhaswarey/AIML-Portfolio-Melicious-Attack-Classifiers](https://github.com/bhaswarey/AIML-Portfolio-Melicious-Attack-Classifiers/blob/main/images/mc_sttl_density.png) 
+
+**Figure 26 - Benign & Malicious 'sTtl' Density **
+
+
+
+ ![AIML-Portfolio-Melicious-Attack-Classifiers/images/proto_benign_malicious.png at main · bhaswarey/AIML-Portfolio-Melicious-Attack-Classifiers](https://github.com/bhaswarey/AIML-Portfolio-Melicious-Attack-Classifiers/blob/main/images/mc_shops_density.png) 
+
+**Figure 27 - Benign & Malicious 'sHops' Density **
+
+
+
+
+
+### 5.3.4   Additional  Evaluation of Binary & Multi-class Classification Models
+
+
+
+### 5.3.4.1   Binary Classification Model Evaluation - Target Feature 'Label'
+
+```
+LR
+              precision    recall  f1-score   support
+
+   Malicious       0.96      0.94      0.95     11827
+      Benign       0.96      0.98      0.97     18166
+
+    accuracy                           0.96     29993
+   macro avg       0.96      0.96      0.96     29993
+weighted avg       0.96      0.96      0.96     29993
+
+KNN
+              precision    recall  f1-score   support
+
+   Malicious       0.98      0.95      0.96     11827
+      Benign       0.97      0.99      0.98     18166
+
+    accuracy                           0.97     29993
+   macro avg       0.97      0.97      0.97     29993
+weighted avg       0.97      0.97      0.97     29993
+
+DT
+              precision    recall  f1-score   support
+
+   Malicious       0.99      0.94      0.96     11827
+      Benign       0.96      1.00      0.98     18166
+
+    accuracy                           0.97     29993
+   macro avg       0.98      0.97      0.97     29993
+weighted avg       0.97      0.97      0.97     29993
+
+SVC
+              precision    recall  f1-score   support
+
+   Malicious       0.98      0.93      0.95     11827
+      Benign       0.96      0.99      0.97     18166
+
+    accuracy                           0.96     29993
+   macro avg       0.97      0.96      0.96     29993
+weighted avg       0.96      0.96      0.96     29993
+```
+
+
+
+
+
+### 5.3.4.2   Multi-class Classification Model Evaluation - Target Feature 'Attack Type'
+
+```
+LR
+                precision    recall  f1-score   support
+
+        Benign       0.97      0.90      0.93     11827
+TCPConnectScan       0.92      1.00      0.95     11181
+       SYNScan       0.97      0.86      0.91      3533
+     HTTPFlood       0.88      0.97      0.92      1809
+       UDPScan       0.95      0.99      0.97       476
+     ICMPFlood       1.00      1.00      1.00       521
+      UDPFlood       1.00      1.00      1.00       415
+      SYNFlood       0.96      0.88      0.92       210
+   SlowrateDoS       1.00      1.00      1.00        21
+
+      accuracy                           0.94     29993
+     macro avg       0.96      0.95      0.96     29993
+  weighted avg       0.94      0.94      0.94     29993
+
+KNN
+                precision    recall  f1-score   support
+
+        Benign       0.98      0.95      0.96     11827
+TCPConnectScan       0.95      0.98      0.96     11181
+       SYNScan       0.98      0.99      0.99      3533
+     HTTPFlood       0.97      0.97      0.97      1809
+       UDPScan       0.95      0.99      0.97       476
+     ICMPFlood       1.00      1.00      1.00       521
+      UDPFlood       1.00      1.00      1.00       415
+      SYNFlood       0.96      0.88      0.92       210
+   SlowrateDoS       0.95      1.00      0.98        21
+
+      accuracy                           0.97     29993
+     macro avg       0.97      0.97      0.97     29993
+  weighted avg       0.97      0.97      0.97     29993
+
+DT
+                precision    recall  f1-score   support
+
+        Benign       1.00      0.94      0.97     11827
+TCPConnectScan       0.94      1.00      0.97     11181
+       SYNScan       0.99      0.85      0.91      3533
+     HTTPFlood       0.77      0.99      0.87      1809
+       UDPScan       0.94      0.99      0.97       476
+     ICMPFlood       1.00      1.00      1.00       521
+      UDPFlood       1.00      1.00      1.00       415
+      SYNFlood       1.00      0.88      0.93       210
+   SlowrateDoS       1.00      1.00      1.00        21
+
+      accuracy                           0.96     29993
+     macro avg       0.96      0.96      0.96     29993
+  weighted avg       0.96      0.96      0.96     29993
+
+SVC
+                precision    recall  f1-score   support
+
+        Benign       0.98      0.93      0.96     11827
+TCPConnectScan       0.93      1.00      0.96     11181
+       SYNScan       0.99      0.96      0.97      3533
+     HTTPFlood       0.99      0.98      0.98      1809
+       UDPScan       0.95      0.99      0.97       476
+     ICMPFlood       1.00      1.00      1.00       521
+      UDPFlood       1.00      1.00      1.00       415
+      SYNFlood       1.00      0.88      0.93       210
+   SlowrateDoS       1.00      1.00      1.00        21
+
+      accuracy                           0.96     29993
+     macro avg       0.98      0.97      0.98     29993
+  weighted avg       0.97      0.96      0.96     29993
+```
+
+
+
+Summarized per class:
+
+```
+
+'Model: LogisticRegression'
+```
+
+|      |        Classes | precision |   recall | f1-score | support |
+| ---: | -------------: | --------: | -------: | -------: | ------: |
+|    0 |         Benign |  0.966977 | 0.903695 | 0.934266 |   11827 |
+|    1 |       UDPFlood |  0.916119 | 0.997317 | 0.954995 |   11181 |
+|    2 |      HTTPFlood |  0.972133 | 0.859043 | 0.912096 |    3533 |
+|    3 |    SlowrateDoS |  0.878939 | 0.971255 | 0.922794 |    1809 |
+|    4 | TCPConnectScan |  0.945674 | 0.987395 | 0.966084 |     476 |
+|    5 |        SYNScan |  0.998084 | 1.000000 | 0.999041 |     521 |
+|    6 |        UDPScan |  0.997596 | 1.000000 | 0.998797 |     415 |
+|    7 |       SYNFlood |  0.963351 | 0.876190 | 0.917706 |     210 |
+|    8 |      ICMPFlood |  1.000000 | 1.000000 | 1.000000 |      21 |
+
+```
+
+'Model: KNeighborsClassifier'
+```
+
+|      |        Classes | precision |   recall | f1-score | support |
+| ---: | -------------: | --------: | -------: | -------: | ------: |
+|    0 |         Benign |  0.979067 | 0.949100 | 0.963850 |   11827 |
+|    1 |       UDPFlood |  0.951239 | 0.978803 | 0.964824 |   11181 |
+|    2 |      HTTPFlood |  0.982570 | 0.989244 | 0.985896 |    3533 |
+|    3 |    SlowrateDoS |  0.969747 | 0.974572 | 0.972153 |    1809 |
+|    4 | TCPConnectScan |  0.947791 | 0.991597 | 0.969199 |     476 |
+|    5 |        SYNScan |  0.998081 | 0.998081 | 0.998081 |     521 |
+|    6 |        UDPScan |  0.997596 | 1.000000 | 0.998797 |     415 |
+|    7 |       SYNFlood |  0.963351 | 0.876190 | 0.917706 |     210 |
+|    8 |      ICMPFlood |  0.954545 | 1.000000 | 0.976744 |      21 |
+
+```
+
+'Model: DecisionTreeClassifier'
+```
+
+|      |        Classes | precision |   recall | f1-score | support |
+| ---: | -------------: | --------: | -------: | -------: | ------: |
+|    0 |         Benign |  0.996949 | 0.939291 | 0.967262 |   11827 |
+|    1 |       UDPFlood |  0.939723 | 0.996959 | 0.967496 |   11181 |
+|    2 |      HTTPFlood |  0.988838 | 0.852533 | 0.915641 |    3533 |
+|    3 |    SlowrateDoS |  0.732400 | 0.983416 | 0.839547 |    1809 |
+|    4 | TCPConnectScan |  0.944112 | 0.993697 | 0.968270 |     476 |
+|    5 |        SYNScan |  1.000000 | 0.996161 | 0.998077 |     521 |
+|    6 |        UDPScan |  0.997596 | 1.000000 | 0.998797 |     415 |
+|    7 |       SYNFlood |  1.000000 | 0.266667 | 0.421053 |     210 |
+|    8 |      ICMPFlood |  1.000000 | 1.000000 | 1.000000 |      21 |
+
+ ![AIML-Portfolio-Melicious-Attack-Classifiers/images/proto_benign_malicious.png at main · bhaswarey/AIML-Portfolio-Melicious-Attack-Classifiers](https://github.com/bhaswarey/AIML-Portfolio-Melicious-Attack-Classifiers/blob/main/images/test_best_model_multi-class_one_vs_one_matrix.png) 
+
+**Figure 28 - Multi-class Classification - One-Vs-One Matrix **
+
+
 
 
 
@@ -916,20 +1432,23 @@ TDB - pending completion of program execution - becasue of the size of the data,
 
 ### 6.0   Deployment
 
-- becasue of the size of the data, the program has been running for over a week now and is partially complete, i.e., binary classification is done but the multi-class classification part is still executing and that is why these sections are marked as TBD
+
 
 ### 6.0.1   Summary
 
-TDB - pending completion of program execution 
+- For binary classification, target feature is balanced
+- For multi-class classification, target feature is imbalanced. Therefore, examined F1-score.
+- All of the models performed weel. The best model for binary classification is DT while the best model for multi-class classification is KNN.
+- DT and KNN performance was very close, therefore for deployment, KNN will be used to predict 'Label' at level 1 and 'Attack Type' at level 2.
 
 
 
 ### 6.0.2   Recommendation
 
-TDB - pending completion of program execution 
+Further analysis needs to be conducted to improve the performance of the models in terms of execution time. 
 
 
 
 ### 7.0   Next Steps
 
-TDB - pending completion of program execution 
+To achieve practical implementation, the code and algorithm must be optimized to process large amounts of data (in Megabytes) in very short period of time (in minutes). Further analysis is required to reduce the number of input features evident from results in section 5.3.3 and 5.2.3.
