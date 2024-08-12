@@ -1096,19 +1096,19 @@ Lets examine 'Offset', 'sTtl', 'Dur' from the important features selected by the
 
  ![AIML-Portfolio-Melicious-Attack-Classifiers/images/proto_benign_malicious.png at main · bhaswarey/AIML-Portfolio-Melicious-Attack-Classifiers](https://github.com/bhaswarey/AIML-Portfolio-Melicious-Attack-Classifiers/blob/main/images/offset_density.png) 
 
-**Figure 19 - Benign & Malicious 'Offset' Density **
+**Figure 19 - Benign & Malicious 'Offset' Density**
 
 
 
  ![AIML-Portfolio-Melicious-Attack-Classifiers/images/proto_benign_malicious.png at main · bhaswarey/AIML-Portfolio-Melicious-Attack-Classifiers](https://github.com/bhaswarey/AIML-Portfolio-Melicious-Attack-Classifiers/blob/main/images/sttl_density.png) 
 
-**Figure 20 - Benign & Malicious 'sTtl' Density **
+**Figure 20 - Benign & Malicious 'sTtl' Density**
 
 
 
  ![AIML-Portfolio-Melicious-Attack-Classifiers/images/proto_benign_malicious.png at main · bhaswarey/AIML-Portfolio-Melicious-Attack-Classifiers](https://github.com/bhaswarey/AIML-Portfolio-Melicious-Attack-Classifiers/blob/main/images/dur_density.png) 
 
-**Figure 21 - Benign & Malicious 'Dur' Density **
+**Figure 21 - Benign & Malicious 'Dur' Density**
 
 
 
