@@ -1007,7 +1007,7 @@ Following is a sample view of the normal data:
 Following is the comparison between the 4 models:
 
 ```
-       					 Model  Train Accuracy  Test Accuracy
+       					     Model  Train Accuracy  Test Accuracy
 0  Logistic Regression        0.960319       0.962491
 1                  KNN        1.000000       0.971827
 2        Decision Tree        0.983725       0.972027
@@ -1020,12 +1020,12 @@ Following is the comparison between the 4 models:
 
  
 
-| algorithm | params |                                        mean_score | std_score | cv_result |                                                   |
-| --------: | -----: | ------------------------------------------------: | --------: | --------: | ------------------------------------------------- |
-|         0 |     LR | {'C': 11.288378916846883, 'max_iter': 5000, 'm... |  0.960219 |  0.000787 | {'mean_fit_time': [0.006623983383178711, 0.005... |
-|         1 |    KNN | {'metric': 'manhattan', 'n_neighbors': 13, 'we... |  0.971822 |  0.000192 | {'mean_fit_time': [0.007259686787923177, 0.011... |
-|         2 |     DT | {'criterion': 'entropy', 'max_depth': 10, 'min... |  0.983110 |  0.000793 | {'mean_fit_time': [0.05327630043029785, 0.0530... |
-|         3 |    SVC |          {'C': 1000, 'gamma': 1, 'kernel': 'rbf'} |  0.978195 |  0.000647 | {'mean_fit_time': [1671.4753562609355, 1586.56... |
+|           | algorithm |                    params                         | mean_score | std_score |                      cv_result                    |
+| --------: | --------: | ------------------------------------------------: | ---------: | --------: | ------------------------------------------------- |
+|         0 |     LR    | {'C': 11.288378916846883, 'max_iter': 5000, 'm... |  0.960219  |  0.000787 | {'mean_fit_time': [0.006623983383178711, 0.005... |
+|         1 |    KNN    | {'metric': 'manhattan', 'n_neighbors': 13, 'we... |  0.971822  |  0.000192 | {'mean_fit_time': [0.007259686787923177, 0.011... |
+|         2 |     DT    | {'criterion': 'entropy', 'max_depth': 10, 'min... |  0.983110  |  0.000793 | {'mean_fit_time': [0.05327630043029785, 0.0530... |
+|         3 |    SVC    |          {'C': 1000, 'gamma': 1, 'kernel': 'rbf'} |  0.978195  |  0.000647 | {'mean_fit_time': [1671.4753562609355, 1586.56... |
 
 
 
