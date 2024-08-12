@@ -1445,7 +1445,7 @@ Summarized per class:
 
 ### 6.0.2   Recommendation
 
-Further analysis needs to be conducted to improve the performance of the models in terms of execution time. 
+Further analysis needs to be conducted to improve the performance of the models in terms of execution time. In the case of multi-class classification where the target feature is 'Attack Type', a tecnique need to be formulated such that when the data is down sampled the result is a balanced data set.
 
 
 
