@@ -1144,7 +1144,7 @@ Following is a sample view of the normal data:
 Following is the comparison between the 4 models:
 
 ```
-     Model  Train Accuracy  Test Accuracy
+                 Model  Train Accuracy  Test Accuracy
 0  Logistic Regression        0.960790       0.941620
 1                  KNN        1.000000       0.968193
 2        Decision Tree        0.981095       0.951255
